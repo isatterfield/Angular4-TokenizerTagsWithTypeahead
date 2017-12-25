@@ -1,0 +1,50 @@
+
+<div class='form-group jt-editor'>
+  <span *ngFor='let tag of tagsCollection'>
+    <span [ngSwitch]='tag.editmode'>
+      <span *ngSwitchCase='true'>
+          <input
+            id="editbox"
+            #editbox
+            type="text"
+            [(ngModel)]='edittag'
+            (keyup.enter)='updateEdit()'
+            (blur)='updateEdit()'
+            class="jt-tag-edit" />
+      </span>
+      <span *ngSwitchCase='false' id="tag{{tag.mytag}}" class='jt-tag' (click)="tagClicked(tag.mytag)">{{tag.mytag}}    
+        <span class=remove-button title="Click to Remove Item" (click)=removeTag(tag.mytag)>x</span>
+      </span>
+    </span>
+  </span>
+  <!-- this span contains the input for adding a new value, as well as presenting the typeahead values -->
+  <span style="display: inline-block;">
+    <input
+      type='text' 
+      id='mybox' 
+      #box 
+      class='jt-tag-new' 
+      style="border:0;" 
+      (keyup.enter)='update()' 
+      (blur)='update()' 
+      (keyup)='typeahead()'
+      (keydown.arrowdown)='goMenuFocus()'
+      (keydown.esc)='closeUpAndReset()'
+      [(ngModel)]='value' />
+  <!-- this is where the type-ahead values are displayed, the ngIf tells the page what to display appropriately --> 
+    <span *ngIf ='IsThereData' style="position: absolute; display: block; float: left; right: auto; z-index: 999;">
+      <div *ngFor='let dat of data'>
+        <span #menuSpan 
+          tabindex="0" 
+          class="form-control ddMenu" 
+          style="cursor: pointer;" 
+          (keydown.arrowdown)='menuDown()'
+          (keydown.arrowup)='menuUp()'
+          (click)='selectField(dat.tagName)'
+          (keyup.enter)='selectField(dat.tagName)'>{{dat.tagName}}
+        </span>
+      </div>
+    </span>
+  </span>
+  <span *ngIf='ShowRemoveAll' title="Click to Remove All" class=remove-button (click)=removeAll()>x</span>
+</div>
